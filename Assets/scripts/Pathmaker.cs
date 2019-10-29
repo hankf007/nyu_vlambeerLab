@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 // MAZE PROC GEN LAB
 // all students: complete steps 1-6, as listed in this file
 // optional: if you have extra time, complete the "extra tasks" to do at the very bottom
@@ -9,31 +11,92 @@ using UnityEngine;
 // STEP 1: ======================================================================================
 // put this script on a Sphere... it will move around, and drop a path of floor tiles behind it
 
+
 public class Pathmaker : MonoBehaviour {
 
-// STEP 2: ============================================================================================
-// translate the pseudocode below
+    public float counter;
+    public float randomnum;
+    public GameObject spherePrefab;
+    public GameObject floorPrefab;
 
-//	DECLARE CLASS MEMBER VARIABLES:
-//	Declare a private integer called counter that starts at 0; 		// counter var will track how many floor tiles I've instantiated
-//	Declare a public Transform called floorPrefab, assign the prefab in inspector;
-//	Declare a public Transform called pathmakerSpherePrefab, assign the prefab in inspector; 		// you'll have to make a "pathmakerSphere" prefab later
+    public Vector3 currentPos;
+    public Vector3 rotation;
+
+    public static int tilecount;
+ 
 
 
-	void Update () {
-//		If counter is less than 50, then:
-//			Generate a random number from 0.0f to 1.0f;
-//			If random number is less than 0.25f, then rotate myself 90 degrees;
-//				... Else if number is 0.25f-0.5f, then rotate myself -90 degrees;
-//				... Else if number is 0.99f-1.0f, then instantiate a pathmakerSpherePrefab clone at my current position;
-//			// end elseIf
+    // STEP 2: ============================================================================================
+    // translate the pseudocode below
 
-//			Instantiate a floorPrefab clone at current position;
-//			Move forward ("forward", as in, the direction I'm currently facing) by 5 units;
-//			Increment counter;
-//		Else:
-//			Destroy my game object; 		// self destruct if I've made enough tiles already
-	}
+    //	DECLARE CLASS MEMBER VARIABLES:
+    //	Declare a private integer called counter that starts at 0; 		// counter var will track how many floor tiles I've instantiated
+    //	Declare a public Transform called floorPrefab, assign the prefab in inspector;
+    //	Declare a public Transform called pathmakerSpherePrefab, assign the prefab in inspector; 		// you'll have to make a "pathmakerSphere" prefab later
+
+
+    void Update () {
+        //		If counter is less than 50, then:
+        //			Generate a random number from 0.0f to 1.0f;
+        //			If random number is less than 0.25f, then rotate myself 90 degrees;
+        //				... Else if number is 0.25f-0.5f, then rotate myself -90 degrees;
+        //				... Else if number is 0.99f-1.0f, then instantiate a pathmakerSpherePrefab clone at my current position;
+        //			// end elseIf
+
+        //			Instantiate a floorPrefab clone at current position;
+        //			Move forward ("forward", as in, the direction I'm currently facing) by 5 units;
+        //			Increment counter;
+        //		Else:
+        //			Destroy my game object; 		// self destruct if I've made enough tiles already
+
+
+        //STEP 2
+        currentPos = transform.position;
+
+        if (counter < 50)
+        {
+            randomnum = Random.Range(0.00f, 1.00f);
+
+            if (randomnum < 0.25f) {
+
+                rotation = new Vector3(rotation.x, rotation.y + 90, rotation.z);
+                transform.rotation = Quaternion.Euler(rotation);
+               // transform.rotation = Quaternion.Euler(0f, 90f, 0f);
+            }
+
+            else if (0.25f<=randomnum&&randomnum<=0.50f)
+            {
+                rotation = new Vector3(rotation.x, rotation.y - 90, rotation.z);
+                transform.rotation = Quaternion.Euler(rotation);
+                // transform.rotation = Quaternion.Euler(0f, -90f, 0f);
+            }                   
+            else if (0.90f <= randomnum && randomnum <= 1.00f)
+            {
+                GameObject newSphere = Instantiate(spherePrefab, currentPos, Quaternion.identity);
+            }
+
+            GameObject newfloor = Instantiate(floorPrefab, currentPos, Quaternion.identity);
+            tilecount++;
+            transform.position+=(transform.rotation* Vector3.forward * 5);
+           
+
+            counter++;
+
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        //STEP 3
+
+        if (tilecount > 9999)
+        {
+            Destroy(gameObject);
+        }
+
+       
+    }
 
 } // end of class scope
 
